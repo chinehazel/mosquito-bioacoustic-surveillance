@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv/
+venv/
+
+# Logs (keep folder structure, ignore live data)
+logs/live_log.txt
+logs/stats.json
+
+# Captured data (numpy captures and CSV — large runtime data)
+captured_data/
+
+# Arduino IDE / Theia
+mosquito_transmitter_arduino/mosquito_transmitter/.theia/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.swp
