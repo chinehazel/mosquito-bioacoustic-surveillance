@@ -17,37 +17,60 @@ This system performs real-time bioacoustic surveillance of mosquito species usin
 ## Repository Structure
 
 ```
-Mosquito_detect_mac/
-│   mosquito_receiver.py              # Python LoRa gateway receiver (v4.2)
-│   mosquito_dashboard_simple.py      # Dash-based web dashboard
-│
-├── Models/                           # TFLite inference models
-│       mosquito_vs_background.tflite     # Model 1 - binary mosquito detection (primary)
-│       model1_v3.tflite                  # Model 1 v3
-│       mosquito_vs_background_v1.tflite  # Model 1 v1
-│       mosquito_species_classifier.tflite # Model 2 - 6-class species classification
-│       model2_v3.tflite                  # Model 2 v3
-│
-├── logs/                             # Runtime logs [git-ignored, generated at runtime]
-│       stats.json                        # Transmission statistics
-│       live_log.txt                      # Live classification log
-│
-├── captured_data/                    # Mel spectrogram captures [git-ignored, generated at runtime]
-│   └── YYYYMMDD_HHMMSS/
-│           capture_XXXX.npy              # Per-transmission mel spectrogram (NumPy)
-│           captures_analysis.csv         # Analysis summary for the session
-│
-├── mosquito_receiver_arduino/        # Arduino gateway/receiver firmware
-│   └── mosquito_receiver/
-│           mosquito_receiver.ino
-│
-└── mosquito_transmitter_arduino/     # Arduino field node firmware (v3.4)
-    └── mosquito_transmitter/
+mosquito-bioacoustic-surveillance/
+|   mosquito_receiver.py              # Python LoRa gateway receiver (v4.2)
+|   mosquito_dashboard_simple.py      # Dash-based web dashboard
+|
+|-- Models/                           # TFLite deployment models (converted from MATLAB)
+|       mosquito_vs_background.tflite     # Model 1 - binary mosquito detection (primary)
+|       model1_v3.tflite                  # Model 1 v3
+|       mosquito_vs_background_v1.tflite  # Model 1 v1
+|       mosquito_species_classifier.tflite # Model 2 - 6-class species classification
+|       model2_v3.tflite                  # Model 2 v3
+|
+|-- training/                         # MATLAB training pipeline
+|   |-- Model_1/                      # Model 1 training artifacts
+|   |       model1trainingcode.m          # CNN training script
+|   |       preprocessing_pipeline.m     # Mel spectrogram preprocessing pipeline
+|   |       model1.mat                    # Trained MATLAB model (source)
+|   |       model1_layer_table.csv        # Layer architecture table
+|   |       model1_metrics_table.csv      # Per-class performance metrics
+|   |       model1_confusion_matrix.png
+|   |       model1_analysis_report.txt
+|   |   `-- GradCAM_Results/
+|   |           ConfusionMatrix.png
+|   |           GradCAM_PerClassAverage.png
+|   |
+|   `-- Model_2/                      # Model 2 training artifacts
+|           model2trainingcode.m          # CNN training script
+|           mosquito_preprocessing_pipeline.m  # Species mel preprocessing pipeline
+|           FinalCNN_architecture.csv
+|           FinalCNN_architecture.png
+|           architecture.png
+|       `-- GradCAM_Results/
+|               ConfusionMatrix.png
+|               GradCAM_PerSpeciesAverage.png
+|
+|-- logs/                             # Runtime logs [git-ignored, generated at runtime]
+|       stats.json                        # Transmission statistics
+|       live_log.txt                      # Live classification log
+|
+|-- captured_data/                    # Mel spectrogram captures [git-ignored, generated at runtime]
+|   `-- YYYYMMDD_HHMMSS/
+|           capture_XXXX.npy              # Per-transmission mel spectrogram (NumPy)
+|           captures_analysis.csv         # Analysis summary for the session
+|
+|-- mosquito_receiver_arduino/        # Arduino gateway/receiver firmware
+|   `-- mosquito_receiver/
+|           mosquito_receiver.ino
+|
+`-- mosquito_transmitter_arduino/     # Arduino field node firmware (v3.4)
+    `-- mosquito_transmitter/
             mosquito_transmitter.ino      # Main transmitter sketch
             mel_spectrogram.h             # On-device mel spectrogram computation
 ```
 
-> **Note:** `logs/` and `captured_data/` are excluded from version control via `.gitignore`. These folders and their contents are generated automatically when the system runs. Clone the repo and run the receiver to populate them.
+> **Note:** `logs/` and `captured_data/` are excluded from version control via `.gitignore`. These folders and their contents are generated automatically when the system runs. The `Models/` folder contains TFLite files converted from the MATLAB source models in `training/`.
 
 ---
 
@@ -56,14 +79,14 @@ Mosquito_detect_mac/
 | Node | Hardware |
 |------|----------|
 | Field Transmitter | Arduino Nano 33 BLE Sense Rev2, ICS-43434 MEMS microphone, RFM95W LoRa (915 MHz), Li-ion battery, AMS1117 3.3V regulator |
-| Gateway Receiver | Arduino (LoRa RX) → USB → Base Station PC |
+| Gateway Receiver | Arduino (LoRa RX) -> USB -> Base Station PC |
 | Base Station | Python receiver + Dash web dashboard |
 
 ### Audio Pipeline (Transmitter)
 - Capture: 2-second clips, 16 kHz, 32,000 samples
-- Pre-filter: Energy ratio E (0.3–20.0), spectral ratio R (0.039–0.10, 200–950 Hz), dB threshold −15.0, P/A ratio 2.0, spectral flatness 0.03–0.15
-- Mel spectrogram: 128 mel bins, FFT 1024, hop length 256, Hamming window, normalized as (melDB + 80) / 80 → 128×122 feature map
-- Inference: Model 1 (binary detection) → Model 2 (species classification) if mosquito detected
+- Pre-filter: Energy ratio E (0.3-20.0), spectral ratio R (0.039-0.10, 200-950 Hz), dB threshold -15.0, P/A ratio 2.0, spectral flatness 0.03-0.15
+- Mel spectrogram: 128 mel bins, FFT 1024, hop length 256, Hamming window, normalized as (melDB + 80) / 80 -> 128x122 feature map
+- Inference: Model 1 (binary detection) -> Model 2 (species classification) if mosquito detected
 
 ### Model Performance
 | Model | Accuracy | Notes |
