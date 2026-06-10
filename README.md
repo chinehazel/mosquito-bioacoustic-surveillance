@@ -22,17 +22,17 @@ Mosquito_detect_mac/
 │   mosquito_dashboard_simple.py      # Dash-based web dashboard
 │
 ├── Models/                           # TFLite inference models
-│       mosquito_vs_background.tflite     # Model 1 — binary mosquito detection (primary)
+│       mosquito_vs_background.tflite     # Model 1 - binary mosquito detection (primary)
 │       model1_v3.tflite                  # Model 1 v3
 │       mosquito_vs_background_v1.tflite  # Model 1 v1
-│       mosquito_species_classifier.tflite # Model 2 — 6-class species classification
+│       mosquito_species_classifier.tflite # Model 2 - 6-class species classification
 │       model2_v3.tflite                  # Model 2 v3
 │
-├── logs/                             # Runtime logs (generated at runtime)
+├── logs/                             # Runtime logs [git-ignored, generated at runtime]
 │       stats.json                        # Transmission statistics
 │       live_log.txt                      # Live classification log
 │
-├── captured_data/                    # Captured mel spectrogram data (generated at runtime)
+├── captured_data/                    # Mel spectrogram captures [git-ignored, generated at runtime]
 │   └── YYYYMMDD_HHMMSS/
 │           capture_XXXX.npy              # Per-transmission mel spectrogram (NumPy)
 │           captures_analysis.csv         # Analysis summary for the session
@@ -46,6 +46,8 @@ Mosquito_detect_mac/
             mosquito_transmitter.ino      # Main transmitter sketch
             mel_spectrogram.h             # On-device mel spectrogram computation
 ```
+
+> **Note:** `logs/` and `captured_data/` are excluded from version control via `.gitignore`. These folders and their contents are generated automatically when the system runs. Clone the repo and run the receiver to populate them.
 
 ---
 
