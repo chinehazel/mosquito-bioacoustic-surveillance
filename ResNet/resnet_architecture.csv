@@ -1,0 +1,74 @@
+No.,Layer Name,Type,Parameters,Output Size
+1,data,ImageInputLayer,"InputSize=[224 224 3], Normalization=zscore",-
+2,conv1,Convolution2DLayer,"Filters=64, Size=[7 7], Stride=[2 2], Padding=manual",-
+3,bn_conv1,BatchNormalizationLayer,"Batch Normalization",-
+4,conv1_relu,ReLULayer,"Activation: ReLU",-
+5,pool1,MaxPooling2DLayer,"PoolSize=[3 3], Stride=[2 2]",-
+6,res2a_branch2a,Convolution2DLayer,"Filters=64, Size=[3 3], Stride=[1 1], Padding=manual",-
+7,bn2a_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+8,res2a_branch2a_relu,ReLULayer,"Activation: ReLU",-
+9,res2a_branch2b,Convolution2DLayer,"Filters=64, Size=[3 3], Stride=[1 1], Padding=manual",-
+10,bn2a_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+11,res2a,AdditionLayer,"Residual Addition",-
+12,res2a_relu,ReLULayer,"Activation: ReLU",-
+13,res2b_branch2a,Convolution2DLayer,"Filters=64, Size=[3 3], Stride=[1 1], Padding=manual",-
+14,bn2b_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+15,res2b_branch2a_relu,ReLULayer,"Activation: ReLU",-
+16,res2b_branch2b,Convolution2DLayer,"Filters=64, Size=[3 3], Stride=[1 1], Padding=manual",-
+17,bn2b_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+18,res2b,AdditionLayer,"Residual Addition",-
+19,res2b_relu,ReLULayer,"Activation: ReLU",-
+20,res3a_branch2a,Convolution2DLayer,"Filters=128, Size=[3 3], Stride=[2 2], Padding=manual",-
+21,bn3a_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+22,res3a_branch2a_relu,ReLULayer,"Activation: ReLU",-
+23,res3a_branch2b,Convolution2DLayer,"Filters=128, Size=[3 3], Stride=[1 1], Padding=manual",-
+24,bn3a_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+25,res3a,AdditionLayer,"Residual Addition",-
+26,res3a_relu,ReLULayer,"Activation: ReLU",-
+27,res3a_branch1,Convolution2DLayer,"Filters=128, Size=[1 1], Stride=[2 2], Padding=manual",-
+28,bn3a_branch1,BatchNormalizationLayer,"Batch Normalization",-
+29,res3b_branch2a,Convolution2DLayer,"Filters=128, Size=[3 3], Stride=[1 1], Padding=manual",-
+30,bn3b_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+31,res3b_branch2a_relu,ReLULayer,"Activation: ReLU",-
+32,res3b_branch2b,Convolution2DLayer,"Filters=128, Size=[3 3], Stride=[1 1], Padding=manual",-
+33,bn3b_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+34,res3b,AdditionLayer,"Residual Addition",-
+35,res3b_relu,ReLULayer,"Activation: ReLU",-
+36,res4a_branch2a,Convolution2DLayer,"Filters=256, Size=[3 3], Stride=[2 2], Padding=manual",-
+37,bn4a_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+38,res4a_branch2a_relu,ReLULayer,"Activation: ReLU",-
+39,res4a_branch2b,Convolution2DLayer,"Filters=256, Size=[3 3], Stride=[1 1], Padding=manual",-
+40,bn4a_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+41,res4a,AdditionLayer,"Residual Addition",-
+42,res4a_relu,ReLULayer,"Activation: ReLU",-
+43,res4a_branch1,Convolution2DLayer,"Filters=256, Size=[1 1], Stride=[2 2], Padding=manual",-
+44,bn4a_branch1,BatchNormalizationLayer,"Batch Normalization",-
+45,res4b_branch2a,Convolution2DLayer,"Filters=256, Size=[3 3], Stride=[1 1], Padding=manual",-
+46,bn4b_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+47,res4b_branch2a_relu,ReLULayer,"Activation: ReLU",-
+48,res4b_branch2b,Convolution2DLayer,"Filters=256, Size=[3 3], Stride=[1 1], Padding=manual",-
+49,bn4b_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+50,res4b,AdditionLayer,"Residual Addition",-
+51,res4b_relu,ReLULayer,"Activation: ReLU",-
+52,res5a_branch2a,Convolution2DLayer,"Filters=512, Size=[3 3], Stride=[2 2], Padding=manual",-
+53,bn5a_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+54,res5a_branch2a_relu,ReLULayer,"Activation: ReLU",-
+55,res5a_branch2b,Convolution2DLayer,"Filters=512, Size=[3 3], Stride=[1 1], Padding=manual",-
+56,bn5a_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+57,res5a,AdditionLayer,"Residual Addition",-
+58,res5a_relu,ReLULayer,"Activation: ReLU",-
+59,res5a_branch1,Convolution2DLayer,"Filters=512, Size=[1 1], Stride=[2 2], Padding=manual",-
+60,bn5a_branch1,BatchNormalizationLayer,"Batch Normalization",-
+61,res5b_branch2a,Convolution2DLayer,"Filters=512, Size=[3 3], Stride=[1 1], Padding=manual",-
+62,bn5b_branch2a,BatchNormalizationLayer,"Batch Normalization",-
+63,res5b_branch2a_relu,ReLULayer,"Activation: ReLU",-
+64,res5b_branch2b,Convolution2DLayer,"Filters=512, Size=[3 3], Stride=[1 1], Padding=manual",-
+65,bn5b_branch2b,BatchNormalizationLayer,"Batch Normalization",-
+66,res5b,AdditionLayer,"Residual Addition",-
+67,res5b_relu,ReLULayer,"Activation: ReLU",-
+68,pool5,GlobalAveragePooling2DLayer,"Global Average Pooling",-
+69,fc_mosquito,FullyConnectedLayer,"OutputSize=6",6
+70,prob,SoftmaxLayer,"Softmax Activation",-
+71,classoutput_mosquito,ClassificationOutputLayer,"Cross-Entropy Loss",6
+
+Total Learnable Parameters,11184390

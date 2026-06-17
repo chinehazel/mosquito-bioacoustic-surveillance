@@ -1,0 +1,26 @@
+No.,Layer Name,Type,Parameters,Output Size
+1,data,ImageInputLayer,"InputSize=[227 227 3]",-
+2,conv1,Convolution2DLayer,"Filters=96, Size=[11 11], Stride=[4 4], Padding=manual",-
+3,relu1,ReLULayer,"Activation: ReLU",-
+4,norm1,CrossChannelNormalizationLayer,"WindowChannelSize=5",-
+5,pool1,MaxPooling2DLayer,"PoolSize=[3 3], Stride=[2 2]",-
+6,conv2,GroupedConvolution2DLayer,"-",-
+7,relu2,ReLULayer,"Activation: ReLU",-
+8,norm2,CrossChannelNormalizationLayer,"WindowChannelSize=5",-
+9,pool2,MaxPooling2DLayer,"PoolSize=[3 3], Stride=[2 2]",-
+10,conv3,Convolution2DLayer,"Filters=384, Size=[3 3], Stride=[1 1], Padding=manual",-
+11,relu3,ReLULayer,"Activation: ReLU",-
+12,conv4,GroupedConvolution2DLayer,"-",-
+13,relu4,ReLULayer,"Activation: ReLU",-
+14,conv5,GroupedConvolution2DLayer,"-",-
+15,relu5,ReLULayer,"Activation: ReLU",-
+16,pool5,MaxPooling2DLayer,"PoolSize=[3 3], Stride=[2 2]",-
+17,fc6_new,FullyConnectedLayer,"OutputSize=4096, LRFactor=10",4096
+18,relu6,ReLULayer,"Activation: ReLU",-
+19,drop6,DropoutLayer,"Probability=0.50",-
+20,fc7_new,FullyConnectedLayer,"OutputSize=4096, LRFactor=10",4096
+21,relu7,ReLULayer,"Activation: ReLU",-
+22,drop7,DropoutLayer,"Probability=0.50",-
+23,fc8_new,FullyConnectedLayer,"OutputSize=6, LRFactor=10",6
+24,prob,SoftmaxLayer,"Softmax Activation",-
+25,output_new,ClassificationOutputLayer,"Cross-Entropy Loss",6

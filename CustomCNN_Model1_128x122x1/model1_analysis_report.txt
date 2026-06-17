@@ -1,0 +1,71 @@
+MODEL 1 ANALYSIS REPORT
+=======================
+Model file: G:\My Drive\Documentation (Training)\1Model\model1_finalized_from_checkpoint.mat
+Network class: SeriesNetwork
+
+ARCHITECTURE
+Total Layers:               42
+Total Learnable Parameters: 1331266
+Input Size:                 128x122x1
+Output Classes:             2
+
+#    Name                   Type                           Parameters                                         Output Size     Learnable Params  
+-----------------------------------------------------------------------------------------------------------------------------------------------
+1    input                  ImageInputLayer                InputSize=[128 122 1], Normalization=none          128x122x1       -                 
+2    conv_init              Convolution2DLayer             Filters=32, Size=[3 3], Stride=[1 1], Padding=same 128x122x32      320               
+3    bn_init                BatchNormalizationLayer        Batch Normalization                                128x122x32      64                
+4    relu_init              ReLULayer                      Activation: ReLU                                   128x122x32      -                 
+5    conv1_1                Convolution2DLayer             Filters=32, Size=[3 3], Stride=[1 1], Padding=same 128x122x32      9248              
+6    bn1_1                  BatchNormalizationLayer        Batch Normalization                                128x122x32      64                
+7    relu1_1                ReLULayer                      Activation: ReLU                                   128x122x32      -                 
+8    conv1_2                Convolution2DLayer             Filters=32, Size=[3 3], Stride=[1 1], Padding=same 128x122x32      9248              
+9    bn1_2                  BatchNormalizationLayer        Batch Normalization                                128x122x32      64                
+10   relu1_2                ReLULayer                      Activation: ReLU                                   128x122x32      -                 
+11   pool1                  MaxPooling2DLayer              PoolSize=[2 2], Stride=[2 2]                       64x61x32        -                 
+12   drop1                  DropoutLayer                   Probability=0.15                                   64x61x32        -                 
+13   conv2_1                Convolution2DLayer             Filters=64, Size=[3 3], Stride=[1 1], Padding=same 64x61x64        18496             
+14   bn2_1                  BatchNormalizationLayer        Batch Normalization                                64x61x64        128               
+15   relu2_1                ReLULayer                      Activation: ReLU                                   64x61x64        -                 
+16   conv2_2                Convolution2DLayer             Filters=64, Size=[3 3], Stride=[1 1], Padding=same 64x61x64        36928             
+17   bn2_2                  BatchNormalizationLayer        Batch Normalization                                64x61x64        128               
+18   relu2_2                ReLULayer                      Activation: ReLU                                   64x61x64        -                 
+19   pool2                  MaxPooling2DLayer              PoolSize=[2 2], Stride=[2 2]                       32x30x64        -                 
+20   drop2                  DropoutLayer                   Probability=0.20                                   32x30x64        -                 
+21   conv3_1                Convolution2DLayer             Filters=128, Size=[3 3], Stride=[1 1], Padding=same 32x30x128       73856             
+22   bn3_1                  BatchNormalizationLayer        Batch Normalization                                32x30x128       256               
+23   relu3_1                ReLULayer                      Activation: ReLU                                   32x30x128       -                 
+24   conv3_2                Convolution2DLayer             Filters=128, Size=[3 3], Stride=[1 1], Padding=same 32x30x128       147584            
+25   bn3_2                  BatchNormalizationLayer        Batch Normalization                                32x30x128       256               
+26   relu3_2                ReLULayer                      Activation: ReLU                                   32x30x128       -                 
+27   conv3_3                Convolution2DLayer             Filters=128, Size=[3 3], Stride=[1 1], Padding=same 32x30x128       147584            
+28   bn3_3                  BatchNormalizationLayer        Batch Normalization                                32x30x128       256               
+29   relu3_3                ReLULayer                      Activation: ReLU                                   32x30x128       -                 
+30   pool3                  MaxPooling2DLayer              PoolSize=[2 2], Stride=[2 2]                       16x15x128       -                 
+31   drop3                  DropoutLayer                   Probability=0.25                                   16x15x128       -                 
+32   conv4_1                Convolution2DLayer             Filters=256, Size=[3 3], Stride=[1 1], Padding=same 16x15x256       295168            
+33   bn4_1                  BatchNormalizationLayer        Batch Normalization                                16x15x256       512               
+34   relu4_1                ReLULayer                      Activation: ReLU                                   16x15x256       -                 
+35   conv4_2                Convolution2DLayer             Filters=256, Size=[3 3], Stride=[1 1], Padding=same 16x15x256       590080            
+36   bn4_2                  BatchNormalizationLayer        Batch Normalization                                16x15x256       512               
+37   relu4_2                ReLULayer                      Activation: ReLU                                   16x15x256       -                 
+38   gap                    GlobalAveragePooling2DLayer    Global Average Pooling                             256             -                 
+39   dropout_final          DropoutLayer                   Probability=0.40                                   256             -                 
+40   fc                     FullyConnectedLayer            OutputSize=2                                       2               514               
+41   softmax                SoftmaxLayer                   Softmax Activation                                 2               -                 
+42   output                 ClassificationOutputLayer      Cross-Entropy Loss                                 2               -                 
+
+DATASET SPLIT
+Train:      34729 (66.9%)
+Validation: 7822 (15.1%)
+Test:       9329 (18.0%)
+Total:      51880
+
+TEST RESULTS
+Overall Accuracy: 91.83%
+
+Class                   Samples   Precision     Recall   F1-Score
+-----------------------------------------------------------------
+Background                 4546      88.36%     95.86%     91.96%
+Mosquito                   4783      95.72%     88.00%     91.70%
+-----------------------------------------------------------------
+Macro Average              9329      92.04%     91.93%     91.83%
