@@ -6,9 +6,7 @@ __pycache__/
 .venv/
 venv/
 
-# Logs (keep folder structure, ignore live data)
-logs/live_log.txt
-logs/stats.json
+
 
 # Captured data (numpy captures and CSV — large runtime data)
 captured_data/
