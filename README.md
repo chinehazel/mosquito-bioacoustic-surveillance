@@ -1,8 +1,8 @@
 # IoT-Based Embedded Platform for Bioacoustic Surveillance of Mosquito Species
 
-An IoT-based embedded system for real-time mosquito detection and species classification using bioacoustic sensing, TinyML, and LoRa communication.
+An IoT-based embedded platform for real-time mosquito surveillance using bioacoustic sensing, embedded signal processing, LoRa communication, and TinyML.
 
-**Bachelor of Science in Computer Applications **  
+**Bachelor of Science in Computer Applications Thesis**  
 **Mindanao State University – Iligan Institute of Technology (MSU-IIT)**
 
 **Authors**
@@ -15,87 +15,115 @@ An IoT-based embedded system for real-time mosquito detection and species classi
 
 ---
 
-## Overview
+# Overview
 
-This repository contains the complete implementation of an IoT-based embedded platform designed for bioacoustic surveillance of mosquito species in support of dengue control programs. The system captures mosquito wingbeat sounds using an embedded MEMS microphone, extracts mel spectrograms directly on the field device, performs on-device inference using TensorFlow Lite models, and transmits detection results through LoRa to a gateway node connected to a Python-based monitoring application and web dashboard.
+This repository contains the complete implementation of an IoT-based embedded platform developed for bioacoustic surveillance of mosquito species in support of dengue control programs.
 
-The system is intended for deployment in outdoor environments to provide automated mosquito monitoring while minimizing power consumption and communication bandwidth through edge processing.
+The system consists of a field transmitter node that captures mosquito wingbeat sounds using an ICS-43434 digital MEMS microphone. The transmitter performs embedded signal screening, generates mel spectrograms on-device, packetizes the extracted features, and transmits them through LoRa to a gateway node. The gateway forwards the received packets to a Base Station PC, where a Python receiver reconstructs the transmitted mel spectrogram, performs mosquito detection and species classification using two TensorFlow Lite models, records runtime statistics, and forwards the classification results to a Dash-based web dashboard for real-time visualization.
+
+The project integrates embedded signal processing, TinyML, wireless communication, and web-based monitoring into a complete end-to-end mosquito surveillance platform intended to support dengue vector monitoring.
 
 ---
 
-## System Architecture
+# System Architecture
 
-The platform consists of three primary components:
+The platform consists of three primary components.
 
-### Field Transmitter Node
+## Field Transmitter Node
+
+### Hardware
 
 - Arduino Nano 33 BLE Sense Rev2
 - ICS-43434 digital MEMS microphone
 - RFM95W LoRa transceiver (915 MHz)
-- On-device mel spectrogram computation
-- TensorFlow Lite inference
-- Battery-powered operation
+- Li-ion battery
+- AMS1117 3.3 V voltage regulator
 
-### Gateway Receiver Node
+### Responsibilities
 
-- Arduino with RFM95W LoRa receiver
-- USB serial communication to the base station
-
-### Base Station
-
-- Python receiver application
-- Dash-based web dashboard
-- Runtime logging
-- Spectrogram reconstruction
-- Detection visualization
+- Capture mosquito wingbeat audio
+- Perform lightweight signal screening
+- Generate mel spectrograms
+- Packetize spectrogram data
+- Transmit packets through LoRa
 
 ---
 
-## Repository Structure
+## Gateway Receiver Node
+
+### Hardware
+
+- Arduino with RFM95W LoRa receiver
+
+### Responsibilities
+
+- Receive LoRa packets
+- Forward received packets to the Base Station PC through USB serial
+
+---
+
+## Base Station
+
+### Software
+
+- Python receiver
+- Dash web dashboard
+
+### Responsibilities
+
+- Reconstruct transmitted mel spectrograms
+- Execute TensorFlow Lite inference
+- Record runtime logs and statistics
+- Display live classification results
+
+---
+
+# Repository Structure
 
 ```text
 mosquito-bioacoustic-surveillance/
 │
 ├── Models/                         # TensorFlow Lite deployment models
 ├── training/                       # MATLAB training pipeline and model development
-├── mosquito_transmitter_arduino/   # Field node firmware
-├── mosquito_receiver_arduino/      # Gateway node firmware
-├── mosquito_receiver.py            # Python gateway receiver
+├── mosquito_transmitter_arduino/   # Field transmitter firmware
+├── mosquito_receiver_arduino/      # Gateway receiver firmware
+├── mosquito_receiver.py            # Python receiver and inference pipeline
 ├── mosquito_dashboard_simple.py    # Dash web dashboard
-├── captured_data_copy/             # Example captured spectrogram data
-├── logs/                           # Example runtime logs
+├── captured_data_copy/             # Example reconstructed mel spectrogram captures
+├── logs/                           # Runtime log directory
 ├── README.md
 └── LICENSE
 ```
 
 ---
 
-## Features
+# Features
 
-- Real-time mosquito wingbeat detection
-- Embedded mel spectrogram generation
-- TensorFlow Lite inference on Arduino Nano 33 BLE Sense Rev2
-- Two-stage deep learning classification pipeline
-- LoRa-based wireless communication
-- Python gateway receiver
+- Real-time mosquito bioacoustic surveillance
+- Embedded signal screening
+- On-device mel spectrogram generation
+- Two-stage TensorFlow Lite inference
+- LoRa wireless communication
+- Python-based gateway receiver
 - Interactive Dash web dashboard
 - Runtime logging and transmission statistics
-- Storage of reconstructed mel spectrogram captures
-- Low-power edge computing architecture suitable for field deployment
+- Example reconstructed mel spectrogram storage
 
 ---
 
-## Signal Processing Pipeline
+# Signal Processing Pipeline
 
-### Audio Acquisition
+## Audio Acquisition
 
 - Sampling rate: **16 kHz**
 - Recording duration: **2 seconds**
-- Total samples: **32,000**
+- Samples per recording: **32,000**
 
-### Signal Screening
+---
 
-Audio segments are screened using lightweight signal processing before neural network inference to reduce unnecessary computation.
+## Signal Screening
+
+Before feature extraction, the embedded transmitter evaluates each recording using lightweight signal processing to reduce unnecessary transmissions.
 
 The screening stage evaluates:
 
@@ -105,9 +133,11 @@ The screening stage evaluates:
 - Peak-to-average ratio
 - Spectral flatness
 
-Only candidate mosquito sounds proceed to feature extraction.
+Only candidate mosquito recordings proceed to mel spectrogram generation.
 
-### Feature Extraction
+---
+
+## Feature Extraction
 
 Mel spectrogram parameters:
 
@@ -115,25 +145,27 @@ Mel spectrogram parameters:
 - FFT size: 1024
 - Hop length: 256
 - Hamming window
-- Normalized log-mel representation
+- Log-mel normalization
 - Output size: **128 × 122**
+
+The generated mel spectrogram is packetized and transmitted to the Base Station through LoRa.
 
 ---
 
-## Machine Learning Models
+# Machine Learning Models
 
-The system employs a cascaded deep learning architecture.
+The system employs a cascaded TensorFlow Lite inference pipeline.
 
-### Model 1
+## Model 1
 
-**Binary Classification**
+### Mosquito vs. Background Classification
 
-Classes:
+Classes
 
 - Mosquito
 - Background
 
-Performance:
+Performance
 
 - Accuracy: **91.83%**
 - Precision: **95.72%**
@@ -141,11 +173,11 @@ Performance:
 
 ---
 
-### Model 2
+## Model 2
 
-**Species Classification**
+### Mosquito Species Classification
 
-Supported species:
+Supported species
 
 - *Aedes aegypti*
 - *Aedes albopictus*
@@ -154,118 +186,136 @@ Supported species:
 - *Culex pipiens*
 - *Culex quinquefasciatus*
 
-Performance:
+Performance
 
 - Accuracy: **80.40%**
 
 ---
 
-## Communication
+# LoRa Communication
 
-### LoRa Parameters
+Communication parameters
 
 - Frequency: **915 MHz**
-- Gateway architecture
 - Packetized mel spectrogram transmission
+- Gateway architecture
 - Packet reception rate: **97.0%** during experimental testing
 
 ---
 
-## Software Components
+# Software Components
 
-### Embedded Firmware
+## Field Node Firmware
 
-Located in:
+Location
 
-```
+```text
 mosquito_transmitter_arduino/
 ```
 
-Responsibilities:
+Responsibilities
 
 - Audio acquisition
-- Signal preprocessing
+- Signal screening
 - Mel spectrogram computation
-- TensorFlow Lite inference
+- Packetization
 - LoRa transmission
 
 ---
 
-### Gateway Firmware
+## Gateway Firmware
 
-Located in:
+Location
 
-```
+```text
 mosquito_receiver_arduino/
 ```
 
-Responsibilities:
+Responsibilities
 
 - Receive LoRa packets
-- Forward packets over USB serial
+- Forward packets to the Base Station PC over USB serial
 
 ---
 
-### Python Receiver
+## Python Receiver
 
-```
+Location
+
+```text
 mosquito_receiver.py
 ```
 
-Responsibilities:
+Responsibilities
 
-- Receive incoming packets
-- Reconstruct mel spectrograms
-- Execute additional classification
-- Save runtime logs
-- Forward results to the dashboard
+- Load the TensorFlow Lite interpreters for Model 1 (Mosquito vs. Background) and Model 2 (Mosquito Species Classification)
+- Receive LoRa packets from the gateway node through USB serial
+- Reconstruct the transmitted 128 × 122 mel spectrogram
+- Execute the two-stage inference pipeline:
+  - Model 1 determines whether mosquito activity is present.
+  - If mosquito activity is detected, Model 2 classifies the mosquito species.
+- Record runtime logs and transmission statistics
+- Forward classification results to the web dashboard
 
 ---
 
-### Dashboard
+## Web Dashboard
 
-```
+Location
+
+```text
 mosquito_dashboard_simple.py
 ```
 
-Features:
+Features
 
-- Live classification updates
+- Live mosquito detection results
+- Species classification display
 - Detection statistics
 - Packet monitoring
 - Runtime visualization
 
 ---
 
-## Runtime Data
+# Runtime Data
 
-The repository includes example runtime outputs for demonstration purposes.
+The repository includes example runtime outputs generated during system development and testing.
 
-### logs/
+## captured_data_copy/
 
-Contains example:
+Contains reconstructed mel spectrogram captures collected during experimental evaluation.
 
-- transmission statistics
-- live detection logs
+## logs/
 
-### captured_data_copy/
+Contains the runtime log directory.
 
-Contains example reconstructed mel spectrogram captures generated during system testing.
+During normal system operation, the following files are generated automatically:
 
-Additional runtime data are automatically generated while the system is operating.
+- `live_log.txt` – Live classification and transmission log
+- `stats.json` – Runtime transmission and detection statistics
+
+These runtime-generated files are excluded from version control through `.gitignore` to avoid committing frequently changing data while preserving the directory structure.
 
 ---
 
-## Getting Started
+# Getting Started
 
-### Requirements
+## Requirements
+
+### Hardware
+
+- Arduino Nano 33 BLE Sense Rev2
+- ICS-43434 MEMS microphone
+- Two RFM95W LoRa modules (915 MHz)
+- Base Station PC
+
+### Software
 
 - Python 3.8 or newer
 - Arduino IDE
-- Arduino Nano 33 BLE Sense Rev2
-- RFM95W LoRa modules
+- MATLAB (for model development only)
 
-Install Python dependencies:
+Install the required Python packages:
 
 ```bash
 pip install numpy pandas dash plotly pyserial tflite-runtime
@@ -273,21 +323,21 @@ pip install numpy pandas dash plotly pyserial tflite-runtime
 
 ---
 
-## Running the System
+# Running the System
 
-### 1. Upload the Firmware
+## 1. Upload the Firmware
 
-Flash:
+Flash
 
-```
+```text
 mosquito_transmitter_arduino/mosquito_transmitter/
 ```
 
 to the field transmitter.
 
-Flash:
+Flash
 
-```
+```text
 mosquito_receiver_arduino/mosquito_receiver/
 ```
 
@@ -295,13 +345,13 @@ to the gateway receiver.
 
 ---
 
-### 2. Connect the Gateway
+## 2. Connect the Gateway
 
-Connect the gateway Arduino to the base station through USB.
+Connect the gateway receiver to the Base Station PC via USB.
 
 ---
 
-### 3. Start the Receiver
+## 3. Start the Python Receiver
 
 ```bash
 python mosquito_receiver.py
@@ -309,15 +359,15 @@ python mosquito_receiver.py
 
 ---
 
-### 4. Launch the Dashboard
+## 4. Launch the Dashboard
 
-Open another terminal and run:
+Open another terminal and run
 
 ```bash
 python mosquito_dashboard_simple.py
 ```
 
-Open your browser at:
+Open your browser at
 
 ```
 http://127.0.0.1:8050
@@ -325,21 +375,23 @@ http://127.0.0.1:8050
 
 ---
 
-## Research Notes
+# Research Notes
 
-The machine learning models were trained using the **HumBugDB** mosquito acoustic dataset and developed in MATLAB before being converted to TensorFlow Lite for deployment on embedded hardware.
-
-Because the training dataset was collected using condenser microphones while the deployed system uses an ICS-43434 digital MEMS microphone, a domain shift exists between training and deployment data. As a result, live detections are currently displayed as **Unknown/Non-dengue Carrier Mosquito** until the models are retrained using MEMS-collected field recordings.
+- Mosquito recordings used for model development were derived from the **HumBugDB** dataset.
+- Background audio used during Model 1 training was additionally sourced from the **ESC-50** environmental sound dataset.
+- Model development, training, and evaluation were performed in MATLAB.
+- The trained CNN models were converted to TensorFlow Lite for deployment.
+- The deployed system uses an ICS-43434 digital MEMS microphone, whereas the HumBugDB recordings were collected using condenser microphones. This domain shift currently limits deployment performance until the models are retrained using MEMS-collected field recordings.
 
 ---
 
-## Future Work
+# Future Work
 
-Planned improvements include:
+Potential improvements include:
 
 - Retraining using MEMS microphone recordings
-- Additional mosquito species support
-- Continuous learning pipeline
+- Expansion to additional mosquito species
+- Continuous model improvement
 - Solar-powered autonomous deployment
 - Cloud synchronization
 - GPS-enabled surveillance
@@ -347,20 +399,28 @@ Planned improvements include:
 
 ---
 
-## Acknowledgments
+# Acknowledgments
 
-This research was conducted as part of the Bachelor of Science in Computer Applications program at **Mindanao State University – Iligan Institute of Technology (MSU-IIT)**.
+This work was conducted as part of the Bachelor of Science in Computer Applications program at **Mindanao State University – Iligan Institute of Technology (MSU-IIT)**.
 
-The authors acknowledge the developers of the **HumBugDB** dataset, which served as the primary training dataset for the machine learning models.
+The authors gratefully acknowledge the following publicly available datasets that made this research possible:
+
+- **HumBugDB**, which served as the primary source of mosquito wingbeat recordings used for model development.
+- **ESC-50**, which provided environmental sound recordings used as background audio during Model 1 training and evaluation.
 
 ---
 
-## Citation
+# Citation
 
 If you use this repository in academic work, please cite:
 
-> Hudaya, C. H. M., Colanze, D. M. M., & Gapito, N. T. (2026). *IoT-Based Embedded Platform for Bioacoustic Surveillance of Mosquito Species in Support of Dengue Control Programs*. Bachelor of Science in Computer Applications Thesis, Mindanao State University – Iligan Institute of Technology.
+> Hudaya, C. H. M., Colanze, D. M. M., & Gapito, N. T. (2026). *IoT-Based Embedded Platform for Bioacoustic Surveillance of Mosquito Species in Support of Dengue Control Programs*. Bachelor of Science in Computer Applications Thesis. Mindanao State University – Iligan Institute of Technology.
 
-Training dataset:
+### Datasets
 
 > Kiskin, I., et al. (2021). *HumBugDB: A Large-scale Acoustic Mosquito Dataset*. NeurIPS 2021 Datasets and Benchmarks Track.
+
+> Piczak, K. J. (2015). *ESC: Dataset for Environmental Sound Classification*. Proceedings of the 23rd ACM International Conference on Multimedia.
+
+The ESC-50 dataset is also publicly available through the Harvard Dataverse:
+https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YDEPUT
